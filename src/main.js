@@ -11,7 +11,6 @@ import initAssistance from "./js/assistance.js";
 
 import { createIcons, icons } from "lucide";
 
-
 // Function to load HTML components
 async function loadComponent(targetId, filePath) {
   const element = document.getElementById(targetId);
@@ -33,27 +32,26 @@ async function loadComponent(targetId, filePath) {
 
 // Initialize Website
 async function init() {
-  await loadComponent("navbar", "/src/components/navbar.html");
-  await loadComponent("home-component", "/src/components/home.html");
-  await loadComponent("about-component", "/src/components/about.html");
-  await loadComponent("branches-component", "/src/components/branches.html");
-  await loadComponent("services-component", "/src/components/services.html");
-  await loadComponent("contact-component", "/src/components/contact.html");
-  
+  await loadComponent("navbar", "/components/navbar.html");
+  await loadComponent("home-component", "/components/home.html");
+  await loadComponent("about-component", "/components/about.html");
+  await loadComponent("branches-component", "/components/branches.html");
+  await loadComponent("services-component", "/components/services.html");
+  await loadComponent("contact-component", "/components/contact.html");
   await loadComponent(
-  "request-modal-component",
-  "/src/components/request-modal.html"
-);
+    "request-modal-component",
+    "/components/request-modal.html"
+  );
+  await loadComponent("footer", "/components/footer.html");
 
-  await loadComponent("footer", "/src/components/footer.html");
-  
-  // Initialize Navbar
+  // Initialize Scripts
   initNavbar();
   initAnimations();
   initCounter();
   initScroll();
   initBranches();
   initAssistance();
+
   createIcons({ icons });
 }
 
