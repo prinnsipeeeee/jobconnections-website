@@ -8,6 +8,7 @@ import initCounter from "./js/counter.js";
 import initScroll from "./js/scroll.js";
 import initBranches from "./js/branches.js";
 import initAssistance from "./js/assistance.js";
+import initSlider from "./js/slider.js";
 
 import { createIcons, icons } from "lucide";
 
@@ -51,6 +52,7 @@ async function init() {
   initScroll();
   initBranches();
   initAssistance();
+  initSlider();
 
   createIcons({ icons });
 }
