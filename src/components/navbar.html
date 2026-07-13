@@ -1,0 +1,149 @@
+<header
+  id="navbar"
+  class="fixed top-0 left-0 w-full bg-white shadow-md border-b border-gray-100 z-50"
+>
+  <nav class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-24">
+
+      <!-- Logo -->
+      <a href="#home" class="flex items-center">
+        <img
+          src="/images/jobcon.png"
+          alt="JobConnections Logo"
+          class="h-16 w-auto"
+        />
+
+        <div class="lead-none">
+
+            <h1 class="text-sm md:text-lg font-black uppercase text-gray-900">
+            The JobConnections
+            </h1>
+            <p class="mt-1 text-[10px] sm:text-s uppercase tracking-[0.18em] text-red-600 font-semibold">
+            International Manpower Services, Inc.
+            </p>
+
+        </div>
+      </a>
+      
+
+      <!-- Desktop Menu -->
+      <ul class="hidden lg:flex items-center gap-10 text-gray-800 font-medium">
+
+        <li>
+          <a href="#home" class="hover:text-red-600 transition">Home</a>
+        </li>
+
+        <li>
+          <a href="#about" class="hover:text-red-600 transition">About</a>
+        </li>
+
+        <li>
+          <a href="#branches" class="hover:text-red-600 transition">Branches</a>
+        </li>
+
+        <li>
+          <a href="#services" class="hover:text-red-600 transition">Services</a>
+        </li>
+
+        <li>
+          <a href="#contact" class="hover:text-red-600 transition">Contact</a>
+        </li>
+
+      </ul>
+
+      <!-- Desktop Buttons -->
+      <div class="hidden lg:flex items-center gap-3">
+
+      <button
+        type="button"
+        class="open-assistance px-5 py-3 text-xs font-semibold rounded-xl bg-red-600 text-white hover:bg-red-700 transition"
+      >
+        Request Assistance
+      </button>
+
+        <a
+          href="#contact"
+          class="px-5 py-3 text-xs font-semibold rounded-xl bg-red-600 text-white hover:bg-red-700 transition"
+        >
+          Inquire Now
+        </a>
+
+      </div>
+
+      <!-- Mobile Button -->
+      <button
+        id="menu-btn"
+        class="lg:hidden text-gray-800"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-8 h-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Overlay -->
+  <div
+    id="overlay"
+    class="fixed inset-0 bg-black/50 hidden lg:hidden"
+  ></div>
+
+  <!-- Mobile Sidebar -->
+  <aside
+    id="mobile-menu"
+    class="fixed top-0 -right-full h-full w-72 bg-white shadow-2xl transition-all duration-300 lg:hidden"
+  >
+
+    <div class="flex items-center justify-between p-6 border-b">
+
+      <img
+        src="/images/jobcon.png"
+        class="h-12"
+      >
+
+      <button id="close-menu" class="text-3xl">
+        &times;
+      </button>
+
+    </div>
+
+    <nav class="flex flex-col p-6 gap-5">
+
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#branches">Branches</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+
+      <hr>
+
+      <a
+        href="#assistance-modal"
+        class="bg-red-600 text-white text-center py-3 rounded-lg"
+      >
+        Request Assistance
+      </a>
+
+      <a
+        href="#contact"
+        class="bg-red-600 text-white text-center py-3 rounded-lg"
+      >
+        Inquire Now
+      </a>
+
+    </nav>
+
+  </aside>
+</header>
