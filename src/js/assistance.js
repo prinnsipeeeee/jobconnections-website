@@ -66,4 +66,52 @@ export default function initAssistance() {
       closeModal();
     }
   });
+  
+  // Used Location
+  const useLocationBtn = document.getElementById("use-location");
+  const addressField = document.getElementById("address");
+
+  if (useLocationBtn) {
+    useLocationBtn.addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+      }
+
+      useLocationBtn.disabled = true;
+      useLocationBtn.textContent = "Getting location...";
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          addressField.value = `${latitude}, ${longitude}`;
+
+          useLocationBtn.disabled = false;
+          useLocationBtn.innerHTML = `
+            <i data-lucide="map-pin" class="w-4 h-4"></i>
+            Use My Location
+          `;
+
+          if (window.lucide) {
+            lucide.createIcons();
+          }
+        },
+        () => {
+          alert("Unable to retrieve your location.");
+
+          useLocationBtn.disabled = false;
+          useLocationBtn.innerHTML = `
+            <i data-lucide="map-pin" class="w-4 h-4"></i>
+            Use My Location
+          `;
+
+          if (window.lucide) {
+            lucide.createIcons();
+          }
+        }
+      );
+    });
+  }
 }
+
