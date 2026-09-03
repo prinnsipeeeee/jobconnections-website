@@ -1,4 +1,4 @@
-<!-- Request Assistance Modal -->
+<!-- Request Assistance / Complaint Modal -->
 <div
   id="assistance-modal"
   class="fixed inset-0 z-9999 hidden bg-black/70 backdrop-blur-sm overflow-y-auto"
@@ -14,8 +14,10 @@
 
       <!-- Close -->
       <button
+        type="button"
         id="close-assistance"
         class="absolute top-5 right-5 w-11 h-11 rounded-full bg-red-600 text-white hover:bg-red-700 transition z-50"
+        aria-label="Close complaint form"
       >
         ✕
       </button>
@@ -37,7 +39,8 @@
         </h2>
 
         <p class="mt-3 text-red-100 max-w-xl mx-auto leading-7">
-          Submit your complaint. All fields marked with * are required.
+          Submit your complaint. All fields marked with *
+          are required.
         </p>
 
       </div>
@@ -45,217 +48,466 @@
       <!-- BODY -->
       <div class="max-h-[70vh] overflow-y-auto p-8 md:p-10">
 
-        <form class="space-y-6">
+        <!-- API Message -->
+        <div
+          id="formMessage"
+          class="hidden mb-6 rounded-xl border px-5 py-4 text-sm"
+          role="alert"
+        ></div>
 
-          <!-- Agency -->
+        <!-- COMPLAINT FORM -->
+        <form
+          id="complaintForm"
+          class="space-y-6"
+          enctype="multipart/form-data"
+        >
+
+          <!-- Honeypot -->
+          <!-- Hidden field used by backend to detect bots -->
+          <div class="hidden" aria-hidden="true">
+            <label for="website">
+              Website
+            </label>
+
+            <input
+              type="text"
+              id="website"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+            >
+          </div>
+
+
+          <!-- ============================= -->
+          <!-- FOREIGN RECRUITMENT AGENCY -->
+          <!-- ============================= -->
+
           <div>
-              <label class="block mb-2 font-medium text-gray-700">
-                  Foreign Recruitment Agency *
+            <label
+              for="foreignRecruitmentAgency"
+              class="block mb-2 font-medium text-gray-700"
+            >
+              Foreign Recruitment Agency *
+            </label>
+
+            <input
+              type="text"
+              id="foreignRecruitmentAgency"
+              name="foreign_recruitment_agency"
+              placeholder="Enter agency name"
+              required
+              class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+            >
+          </div>
+
+
+          <!-- ============================= -->
+          <!-- OFW FULL NAME -->
+          <!-- ============================= -->
+
+          <div>
+            <label
+              for="ofwFullName"
+              class="block mb-2 font-medium text-gray-700"
+            >
+              OFW Full Name *
+            </label>
+
+            <input
+              type="text"
+              id="ofwFullName"
+              name="ofw_full_name"
+              placeholder="Enter your full name"
+              required
+              class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+            >
+          </div>
+
+
+          <!-- ============================= -->
+          <!-- GENDER + BIRTHDATE -->
+          <!-- ============================= -->
+
+          <div class="grid md:grid-cols-2 gap-6">
+
+            <div>
+              <label
+                for="gender"
+                class="block mb-2 font-medium text-gray-700"
+              >
+                Gender *
+              </label>
+
+              <select
+                id="gender"
+                name="gender"
+                required
+                class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+              >
+                <option value="" selected disabled>
+                  Select Gender
+                </option>
+
+                <option value="Male">
+                  Male
+                </option>
+
+                <option value="Female">
+                  Female
+                </option>
+              </select>
+            </div>
+
+
+            <div>
+              <label
+                for="birthdate"
+                class="block mb-2 font-medium text-gray-700"
+              >
+                Birthdate *
               </label>
 
               <input
-                  type="text"
-                  placeholder="Enter agency name"
-                  class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none">
+                type="date"
+                id="birthdate"
+                name="birthdate"
+                required
+                class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+              >
+            </div>
+
           </div>
 
-          <!-- Name -->
+
+          <!-- ============================= -->
+          <!-- OCCUPATION -->
+          <!-- ============================= -->
+
           <div>
-              <label class="block mb-2 font-medium text-gray-700">
-                  OFW Full Name *
+            <label
+              for="occupation"
+              class="block mb-2 font-medium text-gray-700"
+            >
+              Occupation *
+            </label>
+
+            <input
+              type="text"
+              id="occupation"
+              name="occupation"
+              placeholder="e.g. Domestic Helper"
+              required
+              class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+            >
+          </div>
+
+
+          <!-- ============================= -->
+          <!-- NATIONAL ID + PASSPORT -->
+          <!-- ============================= -->
+
+          <div class="grid md:grid-cols-2 gap-6">
+
+            <div>
+              <label
+                for="nationId"
+                class="block mb-2 font-medium text-gray-700"
+              >
+                National ID *
               </label>
 
               <input
-                  type="text"
-                  placeholder="Enter your full name"
-                  class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none">
-          </div>
+                type="text"
+                id="nationId"
+                name="nation_id"
+                placeholder="Enter National ID"
+                required
+                class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+              >
+            </div>
 
-          <!-- Gender + Birthdate -->
-          <div class="grid md:grid-cols-2 gap-6">
 
-              <div>
-                  <label class="block mb-2 font-medium text-gray-700">
-                      Gender *
-                  </label>
-
-                  <select class="w-full rounded-xl border border-gray-300 px-5 py-4">
-                      <option>Select Gender</option>
-                      <option>Male</option>
-                      <option>Female</option>
-                  </select>
-              </div>
-
-              <div>
-                  <label class="block mb-2 font-medium text-gray-700">
-                      Birthdate *
-                  </label>
-
-                  <input
-                      type="date"
-                      class="w-full rounded-xl border border-gray-300 px-5 py-4">
-              </div>
-
-          </div>
-
-          <!-- Occupation -->
-          <div>
-              <label class="block mb-2 font-medium text-gray-700">
-                  Occupation *
+            <div>
+              <label
+                for="passportNo"
+                class="block mb-2 font-medium text-gray-700"
+              >
+                Passport Number *
               </label>
 
               <input
-                  type="text"
-                  placeholder="Domestic Helper"
-                  class="w-full rounded-xl border border-gray-300 px-5 py-4">
-          </div>
-
-          <!-- IDs -->
-          <div class="grid md:grid-cols-2 gap-6">
-
-              <div>
-                  <label class="block mb-2 font-medium text-gray-700">
-                      National ID *
-                  </label>
-
-                  <input
-                      type="text"
-                      class="w-full rounded-xl border border-gray-300 px-5 py-4">
-              </div>
-
-              <div>
-                  <label class="block mb-2 font-medium text-gray-700">
-                      Passport Number *
-                  </label>
-
-                  <input
-                      type="text"
-                      class="w-full rounded-xl border border-gray-300 px-5 py-4">
-              </div>
+                type="text"
+                id="passportNo"
+                name="passport_no"
+                placeholder="Enter Passport Number"
+                required
+                class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+              >
+            </div>
 
           </div>
 
-          <!-- Email + Contact -->
-          <div class="grid md:grid-cols-2 gap-6">
 
-              <div>
-                  <label class="block mb-2 font-medium text-gray-700">
-                      Email Address *
-                  </label>
+          <!-- ============================= -->
+          <!-- EMAIL -->
+          <!-- ============================= -->
 
-                  <input
-                      type="email"
-                      class="w-full rounded-xl border border-gray-300 px-5 py-4">
-              </div>
-
-              <div>
-                  <label class="block mb-2 font-medium text-gray-700">
-                      Contact Number *
-                  </label>
-
-                  <input
-                      type="text"
-                      class="w-full rounded-xl border border-gray-300 px-5 py-4">
-              </div>
-
-          </div>
-
-          <!-- Emergency -->
-          <div class="grid md:grid-cols-2 gap-6">
-
-              <div>
-                  <label class="block mb-2 font-medium text-gray-700">
-                      Primary Contact *
-                  </label>
-
-                  <input
-                      type="text"
-                      class="w-full rounded-xl border border-gray-300 px-5 py-4">
-              </div>
-
-              <div>
-                  <label class="block mb-2 font-medium text-gray-700">
-                      Secondary Contact
-                  </label>
-
-                  <input
-                      type="text"
-                      class="w-full rounded-xl border border-gray-300 px-5 py-4">
-              </div>
-
-          </div>
-
-          <!-- Address -->
           <div>
+            <label
+              for="email"
+              class="block mb-2 font-medium text-gray-700"
+            >
+              Email Address *
+            </label>
 
-              <label id="address" class="block m`b-2 font-medium text-gray-700">
-                  Address Abroad *
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="example@email.com"
+              required
+              class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+            >
+          </div>
+
+
+          <!-- ============================= -->
+          <!-- CONTACT PERSON -->
+          <!-- ============================= -->
+
+          <div>
+            <label
+              for="contactPerson"
+              class="block mb-2 font-medium text-gray-700"
+            >
+              Contact Person *
+            </label>
+
+            <input
+              type="text"
+              id="contactPerson"
+              name="contact_person"
+              placeholder="Enter contact person's name"
+              required
+              class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+            >
+          </div>
+
+
+          <!-- ============================= -->
+          <!-- PRIMARY + SECONDARY CONTACT -->
+          <!-- ============================= -->
+
+          <div class="grid md:grid-cols-2 gap-6">
+
+            <div>
+              <label
+                for="primaryContact"
+                class="block mb-2 font-medium text-gray-700"
+              >
+                Primary Contact *
               </label>
 
-              <textarea
-                  rows="3"
-                  class="w-full rounded-xl border border-gray-300 px-5 py-4 resize-none"></textarea>
+              <input
+                type="text"
+                id="primaryContact"
+                name="primary_contact"
+                placeholder="Primary contact number"
+                required
+                class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+              >
+            </div>
+
+
+            <div>
+              <label
+                for="secondaryContact"
+                class="block mb-2 font-medium text-gray-700"
+              >
+                Secondary Contact
+              </label>
+
+              <input
+                type="text"
+                id="secondaryContact"
+                name="secondary_contact"
+                placeholder="Secondary contact number"
+                class="w-full rounded-xl border border-gray-300 px-5 py-4 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+              >
+            </div>
 
           </div>
 
-           <button
+
+          <!-- ============================= -->
+          <!-- ADDRESS ABROAD -->
+          <!-- ============================= -->
+
+          <div>
+
+            <label
+              for="address"
+              class="block mb-2 font-medium text-gray-700"
+            >
+              Address Abroad *
+            </label>
+
+            <textarea
+              id="address"
+              name="address_abroad"
+              rows="3"
+              placeholder="Enter your current address abroad"
+              required
+              class="w-full rounded-xl border border-gray-300 px-5 py-4 resize-none focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+            ></textarea>
+
+
+            <!-- Use Location -->
+            <button
               type="button"
               id="use-location"
-              class="mt-3 inline-flex items-center gap-2 rounded-lg border border-red-600 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition">
-              <i data-lucide="map-pin" class="w-4 h-4"></i>
+              class="mt-3 inline-flex items-center gap-2 rounded-lg border border-red-600 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <i
+                data-lucide="map-pin"
+                class="w-4 h-4"
+              ></i>
+
               Use My Location
-          </button>
+            </button>
 
-          <!-- Complaint -->
-          <div>
-
-              <label class="block mb-2 font-medium text-gray-700">
-                  Complaint *
-              </label>
-
-              <textarea
-                  rows="6"
-                  placeholder="Describe your complaint..."
-                  class="w-full rounded-xl border border-gray-300 px-5 py-4 resize-none"></textarea>
+            <p class="mt-2 text-sm text-gray-500">
+              You can use your current location to help provide
+              your address.
+            </p>
 
           </div>
 
-          <!-- Evidence -->
+
+          <!-- ============================= -->
+          <!-- LOCATION COORDINATES -->
+          <!-- ============================= -->
+
+          <input
+            type="hidden"
+            id="latitude"
+            name="latitude"
+          >
+
+          <input
+            type="hidden"
+            id="longitude"
+            name="longitude"
+          >
+
+
+          <!-- ============================= -->
+          <!-- COMPLAINT -->
+          <!-- ============================= -->
+
           <div>
 
-              <label class="block mb-2 font-medium text-gray-700">
-                  Upload Evidence
+            <div class="flex items-center justify-between mb-2">
+
+              <label
+                for="complaint"
+                class="font-medium text-gray-700"
+              >
+                Complaint *
               </label>
 
-              <input
-                  type="file"
-                  multiple
-                  class="block w-full rounded-xl border border-gray-300 p-4">
+              <span
+                id="complaintCounter"
+                class="text-sm text-gray-500"
+              >
+                0 / 300
+              </span>
 
-              <p class="text-sm text-gray-500 mt-2">
-                  Accepted formats: JPG, PNG, GIF, PDF, DOC, DOCX
-              </p>
+            </div>
+
+            <textarea
+              id="complaint"
+              name="complaint"
+              rows="6"
+              maxlength="300"
+              required
+              placeholder="Describe your complaint..."
+              class="w-full rounded-xl border border-gray-300 px-5 py-4 resize-none focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+            ></textarea>
 
           </div>
 
-          <!-- Buttons -->
+
+          <!-- ============================= -->
+          <!-- IMAGE EVIDENCE -->
+          <!-- ============================= -->
+
+          <div>
+
+            <label
+              for="imageEvidences"
+              class="block mb-2 font-medium text-gray-700"
+            >
+              Upload Evidence
+            </label>
+
+            <input
+              type="file"
+              id="imageEvidences"
+              name="image_evidences[]"
+              multiple
+              accept="image/*,.pdf,.doc,.docx"
+              class="block w-full rounded-xl border border-gray-300 p-4 cursor-pointer focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none"
+            >
+
+            <p class="text-sm text-gray-500 mt-2">
+              You may upload multiple evidence files.
+            </p>
+
+          </div>
+
+
+          <!-- ============================= -->
+          <!-- BUTTONS -->
+          <!-- ============================= -->
+
           <div class="flex justify-end gap-4 pt-4">
 
-              <button
-                  type="button"
-                  id="close-assistance-bottom"
-                  class="px-6 py-3 rounded-xl border border-gray-300 hover:bg-gray-100 transition">
-                  Cancel
-              </button>
+            <!-- Cancel -->
+            <button
+              type="button"
+              id="close-assistance-bottom"
+              class="px-6 py-3 rounded-xl border border-gray-300 hover:bg-gray-100 transition"
+            >
+              Cancel
+            </button>
 
-              <button
-                  type="submit"
-                  class="px-8 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold transition">
-                  Submit Complaint
-              </button>
+
+            <!-- Submit -->
+            <button
+              type="submit"
+              id="submitComplaintBtn"
+              class="px-8 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+
+              <span id="submitComplaintText">
+                Submit Complaint
+              </span>
+
+              <span
+                id="submitComplaintLoader"
+                class="hidden"
+              >
+                Submitting...
+              </span>
+
+            </button>
 
           </div>
+
         </form>
+
       </div>
     </div>
   </div>

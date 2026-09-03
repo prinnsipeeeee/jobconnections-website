@@ -9,6 +9,8 @@ import initScroll from "./js/scroll.js";
 import initBranches from "./js/branches.js";
 import initAssistance from "./js/assistance.js";
 import initSlider from "./js/slider.js";
+import initContactForm from "./js/contact.js"
+import initJobs from "./js/jobs.js";
 
 import { createIcons, icons } from "lucide";
 
@@ -53,6 +55,8 @@ async function init() {
   initBranches();
   initAssistance();
   initSlider();
+  initContactForm();
+  initJobs();
 
   createIcons({ icons });
 }
