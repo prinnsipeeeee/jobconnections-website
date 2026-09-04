@@ -330,7 +330,7 @@
                 </button>
 
                 <button
-                    id="apply-job-button"
+                    id="application-job-button"
                     type="button"
                     class="px-7 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold transition flex items-center justify-center gap-2"
                 >
@@ -347,4 +347,707 @@
         </div>
 
     </div>
+</div>
+
+<!-- =========================================================
+     APPLICATION MODAL
+========================================================= -->
+
+<div
+  id="application-modal"
+  class="fixed inset-0 z-9999 hidden bg-black/70 backdrop-blur-sm overflow-y-auto"
+>
+  <!-- Center Container -->
+  <div class="min-h-screen flex items-start justify-center px-4 py-8 sm:py-10">
+
+    <!-- Modal Panel -->
+    <div
+      id="application-panel"
+      class="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden"
+    >
+
+      <!-- =====================================================
+           CLOSE BUTTON
+      ====================================================== -->
+
+      <button
+        type="button"
+        id="close-application"
+        aria-label="Close application form"
+        class="absolute top-5 right-5 z-50 w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-all duration-300"
+      >
+        <i
+          data-lucide="x"
+          class="w-5 h-5"
+        ></i>
+      </button>
+
+
+      <!-- =====================================================
+           HEADER
+      ====================================================== -->
+
+      <div
+        class="relative bg-linear-to-br from-red-600 via-red-600 to-red-700 px-6 py-10 sm:px-10 sm:py-12 text-white overflow-hidden"
+      >
+
+        <!-- Decorative circles -->
+        <div
+          class="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-white/10"
+        ></div>
+
+        <div
+          class="absolute -bottom-20 -left-10 w-44 h-44 rounded-full bg-white/5"
+        ></div>
+
+
+        <div class="relative">
+
+          <!-- Icon -->
+          <div
+            class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center mb-6"
+          >
+            <i
+              data-lucide="file-user"
+              class="w-8 h-8 sm:w-10 sm:h-10"
+            ></i>
+          </div>
+
+
+          <!-- Title -->
+          <p
+            class="text-red-100 text-sm font-semibold uppercase tracking-wider"
+          >
+            Job Application
+          </p>
+
+          <h2
+            class="mt-2 text-3xl sm:text-4xl font-bold tracking-tight"
+          >
+            Apply for a Position
+          </h2>
+
+          <p
+            class="mt-3 max-w-2xl text-red-100 leading-7 text-sm sm:text-base"
+          >
+            Complete the application form below and submit your information
+            for consideration.
+          </p>
+
+
+          <!-- Selected Job -->
+          <div
+            id="application-job-summary"
+            class="mt-7 flex items-center gap-4 rounded-2xl bg-white/10 border border-white/20 p-4"
+          >
+
+            <div
+              class="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center shrink-0"
+            >
+              <i
+                data-lucide="briefcase-business"
+                class="w-5 h-5"
+              ></i>
+            </div>
+
+            <div class="min-w-0">
+
+              <p
+                class="text-xs text-red-100 uppercase tracking-wide font-semibold"
+              >
+                Applying For
+              </p>
+
+              <p
+                id="application-job-title"
+                class="mt-1 font-bold text-white truncate"
+              >
+                Selected Job Position
+              </p>
+
+              <p
+                id="application-job-country"
+                class="mt-1 text-sm text-red-100 flex items-center gap-1.5"
+              >
+                <i
+                  data-lucide="map-pin"
+                  class="w-3.5 h-3.5 shrink-0"
+                ></i>
+
+                <span>Country</span>
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- =====================================================
+           FORM BODY
+      ====================================================== -->
+
+      <div
+        class="max-h-[70vh] overflow-y-auto p-6 sm:p-8 lg:p-10"
+      >
+
+        <!-- Form -->
+        <form
+          id="application-form"
+          enctype="multipart/form-data"
+          class="space-y-8"
+        >
+
+          <!-- =================================================
+               PERSONAL INFORMATION
+          ================================================== -->
+
+          <div>
+
+            <div class="flex items-center gap-3 mb-6">
+
+              <div
+                class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0"
+              >
+                <i
+                  data-lucide="user-round"
+                  class="w-5 h-5"
+                ></i>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">
+                  Personal Information
+                </h3>
+
+                <p class="text-sm text-gray-500">
+                  Please provide your complete name.
+                </p>
+              </div>
+
+            </div>
+
+
+            <!-- Name Grid -->
+            <div class="grid sm:grid-cols-2 gap-5">
+
+              <!-- First Name -->
+              <div>
+
+                <label
+                  for="application-first-name"
+                  class="block mb-2 text-sm font-semibold text-gray-700"
+                >
+                  First Name
+                  <span class="text-red-600">*</span>
+                </label>
+
+                <div class="relative">
+
+                  <i
+                    data-lucide="user"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                  ></i>
+
+                  <input
+                    type="text"
+                    id="application-first-name"
+                    name="first_name"
+                    placeholder="Enter your first name"
+                    maxlength="100"
+                    autocomplete="given-name"
+                    required
+                    class="w-full rounded-xl border border-gray-300 bg-white pl-12 pr-4 py-3.5 text-gray-900 outline-none transition focus:border-red-500 focus:ring-4 focus:ring-red-100 placeholder:text-gray-400"
+                  >
+
+                </div>
+
+              </div>
+
+
+              <!-- Middle Name -->
+              <div>
+
+                <label
+                  for="application-middle-name"
+                  class="block mb-2 text-sm font-semibold text-gray-700"
+                >
+                  Middle Name
+                  <span class="text-red-600">*</span>
+                </label>
+
+                <div class="relative">
+
+                  <i
+                    data-lucide="user-round"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                  ></i>
+
+                  <input
+                    type="text"
+                    id="application-middle-name"
+                    name="middle_name"
+                    placeholder="Enter your middle name"
+                    maxlength="100"
+                    autocomplete="additional-name"
+                    required
+                    class="w-full rounded-xl border border-gray-300 bg-white pl-12 pr-4 py-3.5 text-gray-900 outline-none transition focus:border-red-500 focus:ring-4 focus:ring-red-100 placeholder:text-gray-400"
+                  >
+
+                </div>
+
+              </div>
+
+
+              <!-- Last Name -->
+              <div class="sm:col-span-2">
+
+                <label
+                  for="application-last-name"
+                  class="block mb-2 text-sm font-semibold text-gray-700"
+                >
+                  Last Name
+                  <span class="text-red-600">*</span>
+                </label>
+
+                <div class="relative">
+
+                  <i
+                    data-lucide="user"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                  ></i>
+
+                  <input
+                    type="text"
+                    id="application-last-name"
+                    name="last_name"
+                    placeholder="Enter your last name"
+                    maxlength="100"
+                    autocomplete="family-name"
+                    required
+                    class="w-full rounded-xl border border-gray-300 bg-white pl-12 pr-4 py-3.5 text-gray-900 outline-none transition focus:border-red-500 focus:ring-4 focus:ring-red-100 placeholder:text-gray-400"
+                  >
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- Divider -->
+          <div class="border-t border-gray-100"></div>
+
+
+          <!-- =================================================
+               CONTACT INFORMATION
+          ================================================== -->
+
+          <div>
+
+            <div class="flex items-center gap-3 mb-6">
+
+              <div
+                class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0"
+              >
+                <i
+                  data-lucide="contact"
+                  class="w-5 h-5"
+                ></i>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">
+                  Contact Information
+                </h3>
+
+                <p class="text-sm text-gray-500">
+                  How can we contact you?
+                </p>
+              </div>
+
+            </div>
+
+
+            <div class="grid sm:grid-cols-2 gap-5">
+
+              <!-- Contact Number -->
+              <div>
+
+                <label
+                  for="application-contact-number"
+                  class="block mb-2 text-sm font-semibold text-gray-700"
+                >
+                  Contact Number
+                  <span class="text-red-600">*</span>
+                </label>
+
+                <div class="relative">
+
+                  <i
+                    data-lucide="phone"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                  ></i>
+
+                  <input
+                    type="tel"
+                    id="application-contact-number"
+                    name="contact_number"
+                    placeholder="+63 9XX XXX XXXX"
+                    maxlength="100"
+                    autocomplete="tel"
+                    required
+                    class="w-full rounded-xl border border-gray-300 bg-white pl-12 pr-4 py-3.5 text-gray-900 outline-none transition focus:border-red-500 focus:ring-4 focus:ring-red-100 placeholder:text-gray-400"
+                  >
+
+                </div>
+
+              </div>
+
+
+              <!-- Email -->
+              <div>
+
+                <label
+                  for="application-email"
+                  class="block mb-2 text-sm font-semibold text-gray-700"
+                >
+                  Email Address
+                  <span class="text-red-600">*</span>
+                </label>
+
+                <div class="relative">
+
+                  <i
+                    data-lucide="mail"
+                    class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                  ></i>
+
+                  <input
+                    type="email"
+                    id="application-email"
+                    name="email"
+                    placeholder="you@example.com"
+                    maxlength="100"
+                    autocomplete="email"
+                    required
+                    class="w-full rounded-xl border border-gray-300 bg-white pl-12 pr-4 py-3.5 text-gray-900 outline-none transition focus:border-red-500 focus:ring-4 focus:ring-red-100 placeholder:text-gray-400"
+                  >
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- Divider -->
+          <div class="border-t border-gray-100"></div>
+
+
+          <!-- =================================================
+               COVER LETTER
+          ================================================== -->
+
+          <div>
+
+            <div class="flex items-center gap-3 mb-6">
+
+              <div
+                class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0"
+              >
+                <i
+                  data-lucide="pen-line"
+                  class="w-5 h-5"
+                ></i>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">
+                  Cover Letter
+                </h3>
+
+                <p class="text-sm text-gray-500">
+                  Tell us why you are interested in this position.
+                </p>
+              </div>
+
+            </div>
+
+
+            <label
+              for="application-cover-letter"
+              class="block mb-2 text-sm font-semibold text-gray-700"
+            >
+              Your Message
+              <span class="text-red-600">*</span>
+            </label>
+
+            <textarea
+              id="application-cover-letter"
+              name="cover_letter"
+              rows="6"
+              maxlength="300"
+              placeholder="Write a short message explaining why you are applying for this position..."
+              required
+              class="w-full rounded-xl border border-gray-300 bg-white px-5 py-4 text-gray-900 outline-none resize-none transition focus:border-red-500 focus:ring-4 focus:ring-red-100 placeholder:text-gray-400"
+            ></textarea>
+
+            <div class="flex justify-between items-center mt-2">
+
+              <p class="text-xs text-gray-500">
+                Maximum of 300 characters.
+              </p>
+
+              <span
+                id="cover-letter-counter"
+                class="text-xs font-medium text-gray-400"
+              >
+                0 / 300
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- Divider -->
+          <div class="border-t border-gray-100"></div>
+
+
+          <!-- =================================================
+               RESUME UPLOAD
+          ================================================== -->
+
+          <div>
+
+            <div class="flex items-center gap-3 mb-6">
+
+              <div
+                class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0"
+              >
+                <i
+                  data-lucide="file-up"
+                  class="w-5 h-5"
+                ></i>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">
+                  Resume / CV
+                </h3>
+
+                <p class="text-sm text-gray-500">
+                  Upload your latest resume for review.
+                </p>
+              </div>
+
+            </div>
+
+
+            <label
+              for="application-resume"
+              class="group relative block cursor-pointer rounded-2xl border-2 border-dashed border-gray-300 hover:border-red-400 bg-gray-50 hover:bg-red-50/50 transition-all duration-300 p-6 sm:p-8"
+            >
+
+              <div class="text-center">
+
+                <div
+                  class="mx-auto w-14 h-14 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center group-hover:scale-105 transition-transform"
+                >
+                  <i
+                    data-lucide="upload-cloud"
+                    class="w-7 h-7"
+                  ></i>
+                </div>
+
+                <p class="mt-4 font-semibold text-gray-800">
+                  Choose your resume
+                </p>
+
+                <p class="mt-1 text-sm text-gray-500">
+                  Click here to browse your files
+                </p>
+
+                <p class="mt-3 text-xs text-gray-400">
+                  Resume/CV file required
+                </p>
+
+              </div>
+
+
+              <input
+                type="file"
+                id="application-resume"
+                name="resume"
+                accept=".pdf,.doc,.docx"
+                required
+                class="sr-only"
+              >
+
+            </label>
+
+
+            <!-- Selected File -->
+            <div
+              id="application-file-preview"
+              class="hidden mt-4 rounded-xl border border-gray-200 bg-white p-4"
+            >
+
+              <div class="flex items-center gap-3">
+
+                <div
+                  class="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center shrink-0"
+                >
+                  <i
+                    data-lucide="file-text"
+                    class="w-5 h-5"
+                  ></i>
+                </div>
+
+                <div class="min-w-0 flex-1">
+
+                  <p
+                    id="application-file-name"
+                    class="font-semibold text-gray-800 text-sm truncate"
+                  >
+                    resume.pdf
+                  </p>
+
+                  <p
+                    id="application-file-size"
+                    class="text-xs text-gray-500 mt-1"
+                  >
+                    0 KB
+                  </p>
+
+                </div>
+
+                <button
+                  type="button"
+                  id="remove-application-file"
+                  aria-label="Remove selected resume"
+                  class="w-9 h-9 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition"
+                >
+                  <i
+                    data-lucide="trash-2"
+                    class="w-4 h-4"
+                  ></i>
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- Divider -->
+          <div class="border-t border-gray-100"></div>
+
+
+          <!-- =================================================
+               TERMS AND CONDITIONS
+          ================================================== -->
+
+          <div>
+
+            <label
+              class="flex items-start gap-3 cursor-pointer"
+            >
+
+              <input
+                type="checkbox"
+                id="application-terms"
+                name="accepted_terms_and_condition"
+                value="1"
+                required
+                class="mt-1 w-5 h-5 rounded border-gray-300 text-red-600 focus:ring-red-500"
+              >
+
+              <span class="text-sm text-gray-600 leading-6">
+                I confirm that the information I provided is accurate and
+                complete, and I agree to the terms and conditions of
+                The Job Connections.
+                <span class="text-red-600">*</span>
+              </span>
+
+            </label>
+
+          </div>
+
+
+          <!-- =================================================
+               FORM STATUS
+          ================================================== -->
+
+          <div
+            id="application-form-status"
+            class="hidden rounded-xl p-4 text-sm"
+          ></div>
+
+
+          <!-- =================================================
+               BUTTONS
+          ================================================== -->
+
+          <div
+            class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2"
+          >
+
+            <!-- Cancel -->
+            <button
+              type="button"
+              id="close-application-bottom"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-all duration-300"
+            >
+              <i
+                data-lucide="x"
+                class="w-4 h-4"
+              ></i>
+
+              Cancel
+            </button>
+
+
+            <!-- Submit -->
+            <button
+              type="submit"
+              id="submit-application"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold shadow-lg shadow-red-600/20 hover:shadow-red-600/30 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+
+              <i
+                data-lucide="send"
+                class="w-4 h-4"
+              ></i>
+
+              <span id="submit-application-text">
+                Submit Application
+              </span>
+
+            </button>
+
+          </div>
+
+
+          <!-- Required note -->
+          <p class="text-center text-xs text-gray-400 pt-2">
+            <span class="text-red-600">*</span>
+            Required fields
+          </p>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
 </div>

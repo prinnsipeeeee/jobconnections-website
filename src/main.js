@@ -11,6 +11,7 @@ import initAssistance from "./js/assistance.js";
 import initSlider from "./js/slider.js";
 import initContactForm from "./js/contact.js"
 import initJobs from "./js/jobs.js";
+import initApplication from "./js/application.js";
 
 import { createIcons, icons } from "lucide";
 
@@ -57,6 +58,7 @@ async function init() {
   initSlider();
   initContactForm();
   initJobs();
+  initApplication();
 
   createIcons({ icons });
 }

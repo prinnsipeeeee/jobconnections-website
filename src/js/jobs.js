@@ -5,15 +5,16 @@ const JOB_DETAILS_API =
   "https://sys.yaramay.online/api/v1/job-post/get";
 
 export default async function initJobs() {
+  // =========================================================
+  // ELEMENTS
+  // =========================================================
+
   const container = document.getElementById("jobs-container");
   const loading = document.getElementById("jobs-loading");
   const empty = document.getElementById("jobs-empty");
   const error = document.getElementById("jobs-error");
 
-  // =========================================================
-  // JOB DETAILS MODAL
-  // =========================================================
-
+  // Job Details Modal
   const modal = document.getElementById("job-details-modal");
   const panel = document.getElementById("job-details-panel");
 
@@ -36,9 +37,12 @@ export default async function initJobs() {
     document.getElementById("job-details-description");
 
   const applyButton =
-    document.getElementById("apply-job-button");
+    document.getElementById("application-job-button");
 
-  if (!container) return;
+  if (!container) {
+    console.warn("Jobs container was not found.");
+    return;
+  }
 
   let selectedJob = null;
 
@@ -65,18 +69,110 @@ export default async function initJobs() {
   }
 
   // =========================================================
+  // LUCIDE
+  // =========================================================
+
+  function refreshIcons() {
+    if (
+      window.lucide &&
+      typeof window.lucide.createIcons === "function"
+    ) {
+      window.lucide.createIcons();
+    }
+  }
+
+  // =========================================================
+  // LOAD ALL JOBS
+  // =========================================================
+  //
+  // Backend uses paginate(10), therefore one API request
+  // only gives us 10 jobs.
+  //
+  // This function automatically requests page 2, 3, etc.
+  // until all published jobs are collected.
+  // =========================================================
+
+  async function fetchAllJobs() {
+    const allJobs = [];
+
+    let currentPage = 1;
+    let lastPage = 1;
+
+    do {
+      const separator =
+        API_URL.includes("?") ? "&" : "?";
+
+      const url =
+        `${API_URL}${separator}page=${currentPage}`;
+
+      console.log(
+        `Fetching jobs page ${currentPage}:`,
+        url
+      );
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Job API request failed: ${response.status}`
+        );
+      }
+
+      const result = await response.json();
+
+      console.log(
+        `Job API response - page ${currentPage}:`,
+        result
+      );
+
+      if (Array.isArray(result.data)) {
+        allJobs.push(...result.data);
+      }
+
+      // Laravel pagination metadata
+      lastPage =
+        Number(result.meta?.last_page) || 1;
+
+      currentPage++;
+
+    } while (currentPage <= lastPage);
+
+    return allJobs;
+  }
+
+  // =========================================================
   // OPEN JOB DETAILS
   // =========================================================
 
   async function openJobDetails(job) {
-    if (!modal || !panel) return;
+    if (!modal || !panel || !job) {
+      return;
+    }
 
     selectedJob = job;
 
+    console.log(
+      "Opening job details:",
+      job
+    );
+
+    // -------------------------------------------------------
     // Show modal immediately
+    // -------------------------------------------------------
+
     modal.classList.remove("hidden");
 
-    // Temporary loading content
+    document.body.classList.add("overflow-hidden");
+
+    // -------------------------------------------------------
+    // Temporary job information
+    // -------------------------------------------------------
+
     if (titleElement) {
       titleElement.textContent =
         job.title || "Job Opportunity";
@@ -99,12 +195,17 @@ export default async function initJobs() {
             class="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin"
           ></span>
 
-          <span>Loading job details...</span>
+          <span>
+            Loading job details...
+          </span>
         </div>
       `;
     }
 
+    // -------------------------------------------------------
     // Modal animation
+    // -------------------------------------------------------
+
     if (window.Motion) {
       window.Motion.animate(
         panel,
@@ -123,7 +224,7 @@ export default async function initJobs() {
     refreshIcons();
 
     // =======================================================
-    // GET INDIVIDUAL JOB DETAILS
+    // FETCH COMPLETE JOB DETAILS
     // =======================================================
 
     try {
@@ -156,14 +257,14 @@ export default async function initJobs() {
       );
 
       /*
-       * Laravel JsonResource normally returns:
+       * Expected Laravel Resource response:
        *
        * {
        *   data: {
-       *      uuid: "...",
-       *      title: "...",
-       *      country: "...",
-       *      description: "..."
+       *     uuid: "...",
+       *     title: "...",
+       *     country: "...",
+       *     description: "..."
        *   }
        * }
        */
@@ -171,73 +272,75 @@ export default async function initJobs() {
       const jobDetails =
         result.data || result;
 
-      // Update selected job with complete API data
+      // -------------------------------------------------------
+      // Merge list data + detailed API data
+      // -------------------------------------------------------
+
       selectedJob = {
         ...job,
         ...jobDetails,
       };
 
-      // =====================================================
-      // UPDATE MODAL
-      // =====================================================
+      // -------------------------------------------------------
+      // Update title
+      // -------------------------------------------------------
 
       if (titleElement) {
         titleElement.textContent =
-          jobDetails.title ||
-          job.title ||
+          selectedJob.title ||
           "Job Opportunity";
       }
 
+      // -------------------------------------------------------
+      // Update country
+      // -------------------------------------------------------
+
       if (countryElement) {
         countryElement.textContent =
-          jobDetails.country ||
-          job.country ||
+          selectedJob.country ||
           "Country not specified";
       }
 
+      // -------------------------------------------------------
+      // Update date
+      // -------------------------------------------------------
+
       if (dateElement) {
         dateElement.textContent =
-          jobDetails.created_at ||
-          job.created_at ||
+          selectedJob.created_at ||
           "Recently posted";
       }
 
+      // -------------------------------------------------------
+      // Update description
+      // -------------------------------------------------------
+
       if (descriptionElement) {
-        const description =
-          typeof jobDetails.description === "string"
-            ? jobDetails.description.trim()
+        const rawDescription =
+          typeof selectedJob.description === "string"
+            ? selectedJob.description.trim()
             : "";
 
-        if (description) {
-
-          /*
-           * Backend description may contain HTML.
-           *
-           * Example:
-           * <p>We are looking for...</p>
-           * <ul>
-           *   <li>Requirement 1</li>
-           * </ul>
-           *
-           * innerHTML allows the formatting to appear
-           * properly inside the modal.
-           */
-
+        if (rawDescription) {
           descriptionElement.innerHTML =
-            description;
-
+            sanitizeDescription(rawDescription);
         } else {
-
           descriptionElement.innerHTML = `
             <div class="flex items-center gap-3 text-gray-500">
-              <i
-                data-lucide="file-text"
-                class="w-5 h-5"
-              ></i>
+
+              <div
+                class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0"
+              >
+                <i
+                  data-lucide="file-text"
+                  class="w-5 h-5"
+                ></i>
+              </div>
 
               <p class="italic">
                 No job description available.
               </p>
+
             </div>
           `;
         }
@@ -246,7 +349,6 @@ export default async function initJobs() {
       refreshIcons();
 
     } catch (err) {
-
       console.error(
         "Failed to load job details:",
         err
@@ -254,24 +356,34 @@ export default async function initJobs() {
 
       if (descriptionElement) {
         descriptionElement.innerHTML = `
-          <div class="rounded-xl bg-red-50 border border-red-200 p-5">
-            
-            <div class="flex items-center gap-3 text-red-600">
+          <div
+            class="rounded-2xl bg-red-50 border border-red-200 p-5"
+          >
 
-              <i
-                data-lucide="triangle-alert"
-                class="w-5 h-5"
-              ></i>
+            <div
+              class="flex items-center gap-3 text-red-600"
+            >
 
-              <p class="font-medium">
-                Unable to load job description.
-              </p>
+              <div
+                class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center shrink-0"
+              >
+                <i
+                  data-lucide="triangle-alert"
+                  class="w-5 h-5"
+                ></i>
+              </div>
+
+              <div>
+                <p class="font-semibold">
+                  Unable to load job description.
+                </p>
+
+                <p class="text-sm text-red-500 mt-1">
+                  Please try again later.
+                </p>
+              </div>
 
             </div>
-
-            <p class="mt-2 text-sm text-red-500">
-              Please try again later.
-            </p>
 
           </div>
         `;
@@ -286,10 +398,18 @@ export default async function initJobs() {
   // =========================================================
 
   function closeJobDetails() {
-    if (!modal || !panel) return;
+    if (!modal || !panel) {
+      return;
+    }
+
+    const hideModal = () => {
+      modal.classList.add("hidden");
+      document.body.classList.remove(
+        "overflow-hidden"
+      );
+    };
 
     if (window.Motion) {
-
       window.Motion.animate(
         panel,
         {
@@ -301,23 +421,16 @@ export default async function initJobs() {
           duration: 0.25,
           easing: "ease-in",
         }
-      ).finished.then(() => {
-
-        modal.classList.add("hidden");
-
-      });
-
+      ).finished.then(hideModal);
     } else {
-
-      modal.classList.add("hidden");
-
+      hideModal();
     }
 
     selectedJob = null;
   }
 
   // =========================================================
-  // MODAL EVENTS
+  // CLOSE BUTTON
   // =========================================================
 
   closeButton?.addEventListener(
@@ -330,21 +443,26 @@ export default async function initJobs() {
     closeJobDetails
   );
 
+  // =========================================================
+  // CLICK OUTSIDE
+  // =========================================================
+
   modal?.addEventListener(
     "click",
     (event) => {
-
       if (event.target === modal) {
         closeJobDetails();
       }
-
     }
   );
+
+  // =========================================================
+  // ESC KEY
+  // =========================================================
 
   document.addEventListener(
     "keydown",
     (event) => {
-
       if (
         event.key === "Escape" &&
         modal &&
@@ -352,7 +470,6 @@ export default async function initJobs() {
       ) {
         closeJobDetails();
       }
-
     }
   );
 
@@ -360,38 +477,29 @@ export default async function initJobs() {
   // APPLY NOW
   // =========================================================
 
-  applyButton?.addEventListener(
-    "click",
-    () => {
-
-      if (!selectedJob) return;
-
-      console.log(
-        "Applying for job:",
-        selectedJob
-      );
-
-      console.log(
-        "Job UUID:",
-        selectedJob.uuid
-      );
-
-      /*
-       * TEMPORARY
-       *
-       * Later this button will open
-       * the Application Form.
-       *
-       * The selected job UUID will be passed
-       * to the application form as job_id.
-       */
-
-      alert(
-        `Application for: ${selectedJob.title}\n\nJob ID: ${selectedJob.uuid}`
-      );
-
+  applyButton?.addEventListener("click", () => {
+    if (!selectedJob) {
+      console.error("No selected job.");
+      return;
     }
-  );
+
+    console.log(
+      "Opening application form for:",
+      selectedJob
+    );
+
+    // Send the selected job to application.js
+    document.dispatchEvent(
+      new CustomEvent("job:apply", {
+        detail: {
+          job: selectedJob,
+        },
+      })
+    );
+
+    // Close job details modal
+    closeJobDetails();
+  });
 
   // =========================================================
   // LOAD JOB LIST
@@ -400,43 +508,23 @@ export default async function initJobs() {
   showState("loading");
 
   try {
-
-    const response = await fetch(
-      API_URL,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        `API request failed: ${response.status}`
-      );
-    }
-
-    const result =
-      await response.json();
+    const jobs = await fetchAllJobs();
 
     console.log(
-      "Job API response:",
-      result
+      "All published jobs:",
+      jobs
     );
 
-    // Laravel Resource Collection
-    const jobs =
-      Array.isArray(result.data)
-        ? result.data
-        : [];
+    console.log(
+      "Total jobs:",
+      jobs.length
+    );
 
     // =======================================================
     // EMPTY STATE
     // =======================================================
 
     if (jobs.length === 0) {
-
       container.innerHTML = "";
 
       showState("empty");
@@ -446,7 +534,10 @@ export default async function initJobs() {
       return;
     }
 
-    // Hide states
+    // =======================================================
+    // HIDE STATES
+    // =======================================================
+
     loading?.classList.add("hidden");
     empty?.classList.add("hidden");
     error?.classList.add("hidden");
@@ -455,18 +546,15 @@ export default async function initJobs() {
     // RENDER JOB CARDS
     // =======================================================
 
-    container.innerHTML =
-      jobs
-        .map(
-          (job) => `
-
+    container.innerHTML = jobs
+      .map(
+        (job) => `
           <article
             class="group bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
             data-job-id="${escapeHtml(job.uuid)}"
           >
 
-            <!-- Card Header -->
-
+            <!-- HEADER -->
             <div
               class="bg-linear-to-br from-red-600 to-red-700 p-8 text-white"
             >
@@ -500,12 +588,10 @@ export default async function initJobs() {
             </div>
 
 
-            <!-- Card Content -->
-
+            <!-- CONTENT -->
             <div class="p-6">
 
-              <!-- Country -->
-
+              <!-- COUNTRY -->
               <div
                 class="flex items-center gap-3 text-gray-600 mb-4"
               >
@@ -543,8 +629,7 @@ export default async function initJobs() {
               </div>
 
 
-              <!-- Date -->
-
+              <!-- DATE -->
               <div
                 class="flex items-center gap-3 text-gray-500 text-sm mb-6"
               >
@@ -580,13 +665,12 @@ export default async function initJobs() {
               </div>
 
 
-              <!-- Bottom -->
-
+              <!-- FOOTER -->
               <div
                 class="flex items-center justify-between gap-4 pt-5 border-t border-gray-100"
               >
 
-                <!-- Available -->
+                <!-- AVAILABLE -->
 
                 <span
                   class="inline-flex items-center gap-2 text-sm font-semibold text-green-600"
@@ -601,7 +685,7 @@ export default async function initJobs() {
                 </span>
 
 
-                <!-- View Details -->
+                <!-- VIEW DETAILS -->
 
                 <button
                   type="button"
@@ -625,64 +709,53 @@ export default async function initJobs() {
             </div>
 
           </article>
-
         `
-        )
-        .join("");
+      )
+      .join("");
 
-    // =======================================================
-    // LUCIDE
-    // =======================================================
+    // =========================================================
+    // CREATE ICONS
+    // =========================================================
 
     refreshIcons();
 
-    // =======================================================
+    // =========================================================
     // VIEW DETAILS BUTTONS
-    // =======================================================
+    // =========================================================
 
     const detailButtons =
       container.querySelectorAll(
         ".view-job-details"
       );
 
-    detailButtons.forEach(
-      (button) => {
+    detailButtons.forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          const jobUuid =
+            button.dataset.jobUuid;
 
-        button.addEventListener(
-          "click",
-          () => {
+          const job =
+            jobs.find(
+              (item) =>
+                item.uuid === jobUuid
+            );
 
-            const jobUuid =
-              button.dataset.jobUuid;
+          if (!job) {
+            console.error(
+              "Job not found:",
+              jobUuid
+            );
 
-            const job =
-              jobs.find(
-                (item) =>
-                  item.uuid === jobUuid
-              );
-
-            if (!job) {
-
-              console.error(
-                "Job not found:",
-                jobUuid
-              );
-
-              return;
-            }
-
-            // Fetch the complete job
-            // from /job-post/get/{uuid}
-            openJobDetails(job);
-
+            return;
           }
-        );
 
-      }
-    );
+          openJobDetails(job);
+        }
+      );
+    });
 
   } catch (err) {
-
     console.error(
       "Failed to load jobs:",
       err
@@ -696,32 +769,126 @@ export default async function initJobs() {
   }
 }
 
-
 // =========================================================
-// LUCIDE ICON HELPER
+// SANITIZE JOB DESCRIPTION
+// =========================================================
+//
+// Backend may return HTML:
+//
+// <p>Responsible for...</p>
+// <strong>Requirements:</strong>
+// <ul>
+//   <li>...</li>
+// </ul>
+//
+// We allow useful formatting but remove dangerous elements.
 // =========================================================
 
-function refreshIcons() {
+function sanitizeDescription(value) {
+  // Decode HTML entities first.
+  const textarea =
+    document.createElement("textarea");
 
-  if (
-    window.lucide &&
-    typeof window.lucide.createIcons ===
-      "function"
-  ) {
+  textarea.innerHTML = value;
 
-    window.lucide.createIcons();
+  const decoded =
+    textarea.value;
 
+  const parser =
+    new DOMParser();
+
+  const documentFragment =
+    parser.parseFromString(
+      decoded,
+      "text/html"
+    );
+
+  const allowedTags = new Set([
+    "P",
+    "BR",
+    "STRONG",
+    "B",
+    "EM",
+    "I",
+    "U",
+    "UL",
+    "OL",
+    "LI",
+    "H3",
+    "H4",
+    "H5",
+    "BLOCKQUOTE",
+  ]);
+
+  const walker =
+    documentFragment.body;
+
+  function cleanNode(node) {
+    const children =
+      Array.from(node.childNodes);
+
+    children.forEach((child) => {
+      if (child.nodeType === Node.TEXT_NODE) {
+        return;
+      }
+
+      if (child.nodeType !== Node.ELEMENT_NODE) {
+        child.remove();
+        return;
+      }
+
+      const tag =
+        child.tagName;
+
+      if (!allowedTags.has(tag)) {
+        // Keep text inside unknown tags
+        // instead of displaying the HTML syntax.
+        const fragment =
+          document.createDocumentFragment();
+
+        while (child.firstChild) {
+          fragment.appendChild(
+            child.firstChild
+          );
+        }
+
+        child.replaceWith(fragment);
+
+        return;
+      }
+
+      // Remove all attributes.
+      Array.from(
+        child.attributes
+      ).forEach((attribute) => {
+        child.removeAttribute(
+          attribute.name
+        );
+      });
+
+      cleanNode(child);
+    });
   }
 
-}
+  cleanNode(walker);
 
+  return `
+    <div class="job-description-content
+                text-gray-600
+                leading-8
+                space-y-4">
+
+      ${walker.innerHTML}
+
+    </div>
+  `;
+}
 
 // =========================================================
 // ESCAPE HTML
 // =========================================================
 
 function escapeHtml(value) {
-
   if (
     value === null ||
     value === undefined
@@ -735,5 +902,4 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
-
 }
