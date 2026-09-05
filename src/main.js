@@ -48,6 +48,9 @@ async function init() {
   );
   await loadComponent("footer", "/components/footer.html");
 
+  // Render icons from loaded HTML components
+  createIcons({ icons });
+
   // Initialize Scripts
   initNavbar();
   initAnimations();
@@ -59,8 +62,6 @@ async function init() {
   initContactForm();
   initJobs();
   initApplication();
-
-  createIcons({ icons });
 }
 
 init();

@@ -1,3 +1,5 @@
+import { createIcons, icons } from "lucide";
+
 const APPLICATION_API_URL =
   "https://sys.yaramay.online/api/v1/application/01a05d16-b621-73e2-8825-7c9017fd50a7";
 
@@ -86,12 +88,7 @@ export default function initApplication() {
   // =========================================================
 
   function refreshIcons() {
-    if (
-      window.lucide &&
-      typeof window.lucide.createIcons === "function"
-    ) {
-      window.lucide.createIcons();
-    }
+    createIcons ({ icons });
   }
 
 
