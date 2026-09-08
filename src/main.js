@@ -7,7 +7,6 @@ import initAnimations from "./js/animation.js";
 import initCounter from "./js/counter.js";
 import initScroll from "./js/scroll.js";
 import initBranches from "./js/branches.js";
-import initAssistance from "./js/assistance.js";
 import initSlider from "./js/slider.js";
 import initContactForm from "./js/contact.js"
 import initJobs from "./js/jobs.js";
@@ -42,10 +41,6 @@ async function init() {
   await loadComponent("branches-component", "/components/branches.html");
   await loadComponent("services-component", "/components/services.html");
   await loadComponent("contact-component", "/components/contact.html");
-  await loadComponent(
-    "request-modal-component",
-    "/components/request-modal.html"
-  );
   await loadComponent("footer", "/components/footer.html");
 
   // Render icons from loaded HTML components
@@ -57,7 +52,6 @@ async function init() {
   initCounter();
   initScroll();
   initBranches();
-  initAssistance();
   initSlider();
   initContactForm();
   initJobs();
